@@ -21,6 +21,9 @@ class PartialParse(object):
         self.sentence = sentence
 
         ### YOUR CODE HERE
+        self.stack = ['ROOT']
+        self.buffer = sentence[:]
+        self.dependencies = []
         ### END YOUR CODE
 
     def parse_step(self, transition):
@@ -31,6 +34,15 @@ class PartialParse(object):
                         and right-arc transitions.
         """
         ### YOUR CODE HERE
+        if transition == 'S':
+            buffer_top = self.buffer.pop(0)
+            self.stack.append(buffer_top)
+        if transition == 'LA':
+            stack_second_last = self.stack.pop(-2)
+            self.dependencies.append((self.stack[-1], stack_second_last))
+        if transition == 'RA':
+            stack_last = self.stack.pop(-1)
+            self.dependencies.append((self.stack[-1], stack_last))
         ### END YOUR CODE
 
     def parse(self, transitions):
@@ -65,6 +77,22 @@ def minibatch_parse(sentences, model, batch_size):
     """
 
     ### YOUR CODE HERE
+    partial_parses = [PartialParse(s) for s in sentences]
+    unfinished_partial_parses = partial_parses[:]
+
+    while unfinished_partial_parses:
+        batch_partial_parses = unfinished_partial_parses[0:batch_size]
+        transitions = model.predict(batch_partial_parses)
+        for i, partial_parse in enumerate(batch_partial_parses):
+            partial_parse.parse_step(transitions[i])
+
+            #remove parser from unfinished if its stack contains only 'ROOT' , ie: size = 1
+            if len(partial_parse.stack) == 1:
+                unfinished_partial_parses.pop(i) # not very efficient to pop in a list except at the end
+
+    # once we are done, since we did a shallow copy, the attribute .dependencies of the the partial_parses contains
+    # all the dependencies which were created when looping through unfinished_partial_parses
+    dependencies = [partial_parse.dependencies for partial_parse in partial_parses]
     ### END YOUR CODE
 
     return dependencies
