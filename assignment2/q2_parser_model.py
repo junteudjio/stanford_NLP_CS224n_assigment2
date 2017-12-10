@@ -22,7 +22,7 @@ class Config(object):
     embed_size = 50
     hidden_size = 200
     batch_size = 2048
-    n_epochs = 10
+    n_epochs = 50
     lr = 0.001
 
 
@@ -194,7 +194,7 @@ class ParserModel(Model):
             train_op: The Op for training.
         """
         ### YOUR CODE HERE
-        optimizer = tf.train.AdadeltaOptimizer()
+        optimizer = tf.train.AdadeltaOptimizer(learning_rate=self.config.lr)
         train_op = optimizer.minimize(loss, name='train_op')
         ### END YOUR CODE
         return train_op
@@ -234,7 +234,7 @@ class ParserModel(Model):
         self.build()
 
 
-def main(debug=True):
+def main(debug=False):
     print 80 * "="
     print "INITIALIZING"
     print 80 * "="
