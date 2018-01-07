@@ -10,7 +10,7 @@ In this assignment we have implemented the followings using python + tensorflow:
 
 The section 3 of this assignment have many mathematical questions involving:
 - Deriving the gradients of on RNN language model.
-- You can find my (typed, correct and more detailed) solutions here:  [CS224n_written_sections_solutions](https://github.com/junteudjio/stanford_NLP_CS224n_written_sections_solutions)
+- You can find my (handwritten, correct and more detailed) solutions here:  [CS224n_written_sections_solutions](https://github.com/junteudjio/stanford_NLP_CS224n_written_sections_solutions)
 
 
 ## Contributors
